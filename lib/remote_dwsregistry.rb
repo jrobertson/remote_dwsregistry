@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 # file: remote_dwsregistry.rb
-# description: Used in conjunction with the rack_dwsregistry gem to remotely get and set keys from the XML based registry.
+# description: Used in conjunction with the rack_dwsregistry gem to 
+#              remotely get and set keys from the XML based registry.
 
 
 require 'json'
@@ -11,12 +12,31 @@ require 'gpd-request'
 
 class RemoteDwsRegistry
 
-  def initialize(url_base='http://127.0.0.1:9292/')
+  def initialize(url2_base="http://127.0.0.1:9292/", domain: '127.0.0.1', 
+                 port: '9292', url_base: "http://#{domain}:#{port}/")
 
-    @url_base = url_base
+    @url_base = url2_base || url_base
     @url_base += '/' unless url_base[-1] == '/'
     @req = GPDRequest.new
+
   end
+  
+  def delete_key(key)
+
+    r = @req.get(@url_base + key, {action: 'delete_key'})    
+
+    case r.content_type
+    when 'application/json'
+
+      JSON.parse r.body
+
+    else
+
+      r.body
+    
+    end
+
+  end  
 
   def get_key(key)
 
@@ -30,7 +50,7 @@ class RemoteDwsRegistry
 
     when 'application/json'
 
-      r.body.to_json
+      JSON.parse r.body
 
     else
 
@@ -39,6 +59,33 @@ class RemoteDwsRegistry
     end
 
   end
+  
+  def get_keys(key)
+
+    r = @req.get(@url_base + key, {action: 'get_keys'})    
+
+    case r.content_type
+    when 'application/xml'
+
+      doc = Rexle.new(r.body)
+      
+      if doc.root.elements then
+        doc.root.elements.to_a 
+      else
+        []
+      end
+
+    when 'application/json'
+
+      JSON.parse r.body
+
+    else
+
+      r.body
+    
+    end
+
+  end  
 
   def set_key(key, val)
 
@@ -54,7 +101,7 @@ class RemoteDwsRegistry
 
     when 'application/json'
 
-      r.body.to_json
+      JSON.parse r.body
 
     else
 
