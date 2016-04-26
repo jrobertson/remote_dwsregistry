@@ -118,7 +118,7 @@ class RemoteDwsRegistry
   
   def xpath(path)
     
-    r = @req.get(@url_base + key, {xpath: path})
+    r = @req.get(@url_base, {xpath: path})
 
     case r.content_type
     when 'application/xml'

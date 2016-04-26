@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'remote_dwsregistry'
-  s.version = '0.2.3'
+  s.version = '0.2.4'
   s.summary = 'Used in conjunction with the rack_dwsregistry gem to remotely get and set keys from the XML based registry.'
   s.authors = ['James Robertson']
   s.files = Dir['lib/remote_dwsregistry.rb']
