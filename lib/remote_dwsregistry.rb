@@ -12,7 +12,7 @@ require 'gpd-request'
 
 class RemoteDwsRegistry
 
-  def initialize(url2_base="http://127.0.0.1:9292/", domain: '127.0.0.1', 
+  def initialize(url2_base=nil, domain: '127.0.0.1', 
                  port: '9292', url_base: "http://#{domain}:#{port}/")
 
     @url_base = url2_base || url_base
