@@ -124,7 +124,12 @@ class RemoteDwsRegistry
     when 'application/xml'
 
       doc = Rexle.new(r.body)
-      doc.root
+      
+      if doc.root.elements then
+        doc.root.elements.to_a 
+      else
+        []
+      end
 
     when 'application/json'
 
