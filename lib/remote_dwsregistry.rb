@@ -116,4 +116,25 @@ class RemoteDwsRegistry
     r.xml if r.is_a? Rexle::Element
   end
   
+  def xpath(path)
+    
+    r = @req.get(@url_base + key, {xpath: path})
+
+    case r.content_type
+    when 'application/xml'
+
+      doc = Rexle.new(r.body)
+      doc.root
+
+    when 'application/json'
+
+      JSON.parse r.body
+
+    else
+
+      r.body
+    
+    end
+  end  
+  
 end
