@@ -38,7 +38,7 @@ class RemoteDwsRegistry
 
   end  
 
-  def get_key(key)
+  def get_key(key='')
 
     r = @req.get(@url_base + key)    
 
@@ -110,4 +110,10 @@ class RemoteDwsRegistry
     end
 
   end
+  
+  def xml()
+    r = get_key()
+    r.xml if r.is_a? Rexle::Element
+  end
+  
 end
