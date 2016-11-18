@@ -38,7 +38,7 @@ class RemoteDwsRegistry
 
   end  
 
-  def get_key(key='')
+  def get_key(key='', auto_detect_type: false)
 
     r = @req.get(@url_base + key)    
 
@@ -46,7 +46,33 @@ class RemoteDwsRegistry
     when 'application/xml'
 
       doc = Rexle.new(r.body)
-      doc.root
+      e = doc.root
+      
+      return e unless auto_detect_type
+      
+      c = e.attributes[:type]
+      s = e.text
+
+      return e if e.elements.length > 0 or s.nil?    
+      return s unless c
+            
+      h = {
+        string: ->(x) {x},
+        boolean: ->(x){ 
+          case x
+          when 'true' then true
+          when 'false' then false
+          when 'on' then true
+          when 'off' then false
+          else x
+          end
+        },
+        number: ->(x){  x[/^[0-9]+$/] ? x.to_i : x.to_f },
+        time:   ->(x) {Time.parse x},
+        json:   ->(x) {JSON.parse x}
+      }
+                              
+      h[c.to_sym].call s         
 
     when 'application/json'
 
@@ -57,6 +83,8 @@ class RemoteDwsRegistry
       r.body
     
     end
+    
+    
 
   end
   
