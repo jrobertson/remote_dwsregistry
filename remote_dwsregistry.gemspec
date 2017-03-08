@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'remote_dwsregistry'
-  s.version = '0.2.6'
+  s.version = '0.2.7'
   s.summary = 'Used in conjunction with the rack_dwsregistry gem to remotely get and set keys from the XML based registry.'
   s.authors = ['James Robertson']
   s.files = Dir['lib/remote_dwsregistry.rb']
@@ -9,6 +9,6 @@ Gem::Specification.new do |s|
   s.signing_key = '../privatekeys/remote_dwsregistry.pem'
   s.cert_chain  = ['gem-public_cert.pem']
   s.license = 'MIT'
-  s.email = 'james@r0bertson.co.uk'
+  s.email = 'james@jamesrobertson.eu'
   s.homepage = 'https://github.com/jrobertson/remote_dwsregistry'
 end

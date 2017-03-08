@@ -48,7 +48,17 @@ class RemoteDwsRegistry
       doc = Rexle.new(r.body)
       e = doc.root
       
-      return e unless auto_detect_type
+     
+      if auto_detect_type == false then
+        
+        def e.to_os()
+           OpenStruct.new self.elements.inject({}) \
+               {|r,x| r.merge(x.name => x.text) }
+        end 
+      
+        return e         
+      end
+        
       
       c = e.attributes[:type]
       s = e.text
