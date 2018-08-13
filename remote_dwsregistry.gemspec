@@ -1,10 +1,11 @@
 Gem::Specification.new do |s|
   s.name = 'remote_dwsregistry'
-  s.version = '0.2.7'
-  s.summary = 'Used in conjunction with the rack_dwsregistry gem to remotely get and set keys from the XML based registry.'
+  s.version = '0.2.8'
+  s.summary = 'Used in conjunction with the rack_dwsregistry gem to ' + 
+      'remotely get and set keys from the XML based registry.'
   s.authors = ['James Robertson']
   s.files = Dir['lib/remote_dwsregistry.rb']
-  s.add_runtime_dependency('rexle', '~> 1.3', '>=1.3.30')
+  s.add_runtime_dependency('rexle', '~> 1.4', '>=1.4.12')
   s.add_runtime_dependency('gpd-request', '~> 0.3', '>=0.3.0') 
   s.signing_key = '../privatekeys/remote_dwsregistry.pem'
   s.cert_chain  = ['gem-public_cert.pem']

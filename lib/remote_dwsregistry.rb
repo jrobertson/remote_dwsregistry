@@ -13,11 +13,13 @@ require 'gpd-request'
 class RemoteDwsRegistry
 
   def initialize(url2_base=nil, domain: '127.0.0.1', 
-                 port: '9292', url_base: "http://#{domain}:#{port}/")
+                 port: '9292', url_base: "http://#{domain}:#{port}/", 
+                 debug: false)
 
     @url_base = url2_base || url_base
     @url_base += '/' unless url_base[-1] == '/'
     @req = GPDRequest.new
+    @debug = debug
 
   end
   
@@ -41,7 +43,9 @@ class RemoteDwsRegistry
   def get_key(key='', auto_detect_type: false)
 
     r = @req.get(@url_base + key)    
-
+    
+    puts 'r.content_type: ' +  r.content_type.inspect if @debug
+    
     case r.content_type
     when 'application/xml'
 
@@ -64,7 +68,7 @@ class RemoteDwsRegistry
       s = e.text
 
       return e if e.elements.length > 0 or s.nil?    
-      return s unless c
+      return s.to_s unless c
             
       h = {
         string: ->(x) {x},
@@ -112,6 +116,30 @@ class RemoteDwsRegistry
       else
         []
       end
+
+    when 'application/json'
+
+      JSON.parse r.body
+
+    else
+
+      r.body
+    
+    end
+
+  end  
+  
+  def import(s)
+
+    url = @url_base + 'import'
+
+    r = @req.post(url, 's' => s)
+
+    case r.content_type
+    when 'application/xml'
+
+      doc = Rexle.new(r.body)
+      doc.root
 
     when 'application/json'
 
