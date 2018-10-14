@@ -90,7 +90,8 @@ class RemoteDwsRegistry
 
     when 'application/json'
 
-      JSON.parse r.body
+      h = JSON.parse r.body
+      return nil if h == {get_key: 'key not found'}
 
     else
 
