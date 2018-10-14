@@ -7,6 +7,7 @@
 
 require 'json'
 require 'rexle'
+require 'requestor'
 require 'gpd-request'
 
 
@@ -38,7 +39,36 @@ class RemoteDwsRegistry
     
     end
 
-  end  
+  end
+
+  def gem_register(gemfile)
+    
+    if gemfile =~ /^\w+\:\/\// then
+      
+      puts 'about to remotely request gemfile' if @debug
+      code = Requestor.read(File.dirname(gemfile)) do |x| 
+        x.require File.basename(gemfile)
+      end
+      
+      eval code
+      
+    else
+      
+      require gemfile
+      
+    end
+    
+    if defined? RegGem::register then
+      
+      reg = RegGem::register
+      puts 'importing registry' + reg.inspect
+      import reg 
+      
+    else
+      nil
+    end
+    
+  end
 
   def get_key(key='', auto_detect_type: false)
 
